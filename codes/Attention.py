@@ -71,7 +71,7 @@ class BaseDenseAttention(Layer):
             q_mask = K.expand_dims(q_mask)
             result *= K.cast(q_mask, K.dtype(result))
         if self.return_attention_scores:
-            return result, attention_scores
+            return [result, attention_scores]
         return result
 
     def compute_output_shape(self, input_shape):
@@ -88,7 +88,7 @@ class BaseDenseAttention(Layer):
             q_mask = mask[0]
             if q_mask is None:
                 return None
-            return tf.convert_to_tensor(q_mask)
+            return q_mask
         return None
 
     def _validate_call_args(self, inputs, mask):
