@@ -41,10 +41,9 @@ class SinusoidalPositionEmbedding(Layer):
         self.supports_masking = True
 
     def call(self, inputs, **kwargs):
-        input_dtype = K.dtype(inputs)
         seq_len, out_dim = K.int_shape(inputs)[1:]
-        positions = K.arange(0, stop=seq_len, dtype=input_dtype)[None]
-        indices = K.arange(0, stop=out_dim // 2, dtype=input_dtype)
+        positions = K.arange(0, stop=seq_len, dtype=self.dtype)[None]
+        indices = K.arange(0, stop=out_dim // 2, dtype=self.dtype)
         indices = K.pow(10000.0, -2 * indices / out_dim)
         positions = tf.einsum('bn,d->bnd', positions, indices)
         positions = K.stack([K.sin(positions), K.cos(positions)], axis=-1)
